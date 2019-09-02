@@ -11,13 +11,15 @@
 	<button onClick="restart();">Restart</button>
 	<button onClick="back();">Back</button>
 </p>
-<canvas id="myCanvas" width="800" height="800" style="border:1px solid #d3d3d3;" onclick="onMouseClick(event)">
+<p id="vars">
+</p>
+<canvas id="myCanvas" width="1015" height="630" style="border:1px solid #d3d3d3;" onclick="onMouseClick(event)">
 Your browser does not support the HTML5 canvas tag.</canvas>
 
 <script>
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
-var H = 35;
+var H = 25;
 
 var playerNo = 1
 var playerCount = 2
@@ -44,17 +46,20 @@ function restart()
 	columnCount = ((c.width / H) | 0) + 1;
 	rowCount = ((c.height / H) | 0) + 1;
 
+  document.getElementById("vars").innerHTML = "Rows = " + rowCount + "<br />";
+  document.getElementById("vars").innerHTML += "Cols = " + columnCount + "<br />";
+
 	ctx.beginPath()
 	ctx.lineWidth=1
 	for(let i=0; i<rowCount; i++) {
 		ctx.moveTo(0, i * H);
-		ctx.lineTo(c.height, i * H);
+		ctx.lineTo(c.width, i * H);
 		ctx.stroke();
 		pole.push(new Array(columnCount))
 	}
 	for(let i=0; i<columnCount; i++) {
 		ctx.moveTo(i * H, 0);
-		ctx.lineTo(i * H, c.width);
+		ctx.lineTo(i * H, c.height);
 		ctx.stroke();
 	}
 }
@@ -108,6 +113,18 @@ function nakresliCtverecek(x,y)
 	ctx.stroke();
 }
 
+function nakresliHacek(x,y)
+{
+	var posun = H / 5;
+	ctx.beginPath()
+	ctx.strokeStyle = "darkblue";
+	ctx.lineWidth=5
+	ctx.moveTo(x*H + posun + posun/2, y*H + H/2);
+	ctx.lineTo(x*H + H/2, (y+1)*H - posun);
+	ctx.lineTo((x+1)*H - posun, y*H + posun);
+	ctx.stroke();
+}
+
 function nakresliNic(x,y)
 {
 	var posun = 2;
@@ -142,7 +159,7 @@ function onMouseClick(event)
 		nakresliKolecko(x, y)
 	}
 	else if(playerNo == 3) {
-		nakresliCtverecek(x, y)
+		nakresliHacek(x, y)
 	}
 	pole[y][x] = playerNo
 	journal.push([y, x])
@@ -205,4 +222,3 @@ function zkontrolujPetici(y, x, sy, sx)
 
 </body>
 </html>
-
